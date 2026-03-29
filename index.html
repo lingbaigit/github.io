@@ -99,7 +99,6 @@
       color: #775252;
     }
 
-
     .footer {
       margin-top: 20px;
       font-size: 14px;
@@ -112,7 +111,7 @@
   <div class="heart-container" id="heartContainer"></div>
 
   <div class="love-box">
-    <div class="names">👦 先生 & 👧 小姐</div>
+    <div class="names" id="names">👦 先生 ❤️ 👧 小姐</div>
     <div class="title">我们在一起已经</div>
     <div class="days" id="dayNum">0</div>
     <div class="hms" id="hms">00:00:00</div>
@@ -126,17 +125,21 @@
 
   <audio id="bgMusic" loop>
     <source src="https://www.johnson.ink/music/love.mp3" type="audio/mpeg">
-  
+  </audio>
 
   <script>
     // ======================
     // 在这里修改你们的信息
     // ======================
-    const LOVE_START = [2023, 12, 2]  // 年, 月-1, 日
-    const MEMORIAL_DAY = 2           // 每月纪念日几号
-    const BOY_NAME = "凌白"
-    const GIRL_NAME = "林"
+    const LOVE_START = [2023, 11, 2]  // 年, 月-1, 日 → 12月=11
+    const BOY_NAME = "陈铸培"
+    const GIRL_NAME = "林祁芬"
 
+    // 初始化名字显示
+    function initName() {
+      const nameElement = document.getElementById('names');
+      nameElement.innerText = `👦 ${BOY_NAME} & 👧 ${GIRL_NAME}`;
+    }
 
     // 计时
     function update() {
@@ -153,13 +156,16 @@
       document.getElementById("hms").innerText =
         `${String(hour).padStart(2,0)}:${String(min).padStart(2,0)}:${String(sec).padStart(2,0)}`
 
-      // 下月纪念日
-      const next = new Date()
-      next.setDate(MEMORIAL_DAY)
-      if (next < now) next.setMonth(next.getMonth() + 1)
-      const left = Math.ceil((next - now) / 86400000)
-      document.getElementById("countdown").innerText =
-        `距离下一个纪念日还有：${left} 天`
+      // ==============================================
+      // 【已修改】每年一次纪念日倒计时
+      // ==============================================
+      let nextAnni = new Date(now.getFullYear(), LOVE_START[1], LOVE_START[2]);
+      if (nextAnni < now) {
+        nextAnni = new Date(now.getFullYear() + 1, LOVE_START[1], LOVE_START[2]);
+      }
+      const leftDays = Math.ceil((nextAnni - now) / 86400000);
+      document.getElementById("countdown").innerText = 
+        `距离下一个纪念日还有：${leftDays} 天`;
     }
 
     // 爱心
@@ -175,6 +181,7 @@
     }
 
     // 启动
+    initName();
     update()
     setInterval(update, 1000)
     setInterval(createHeart, 350)
