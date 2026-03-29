@@ -73,6 +73,14 @@
       margin-bottom: 8px;
     }
 
+    /* 新增开始日期样式 */
+    .start-date {
+      font-size: 16px;
+      color: #b86b7e;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
     .title {
       font-size: 22px;
       color: #e65a7a;
@@ -112,6 +120,8 @@
 
   <div class="love-box">
     <div class="names" id="names">👦 先生 ❤️ 👧 小姐</div>
+    <!-- 新增开始日期展示区域 -->
+    <div class="start-date" id="startDate">始于：2023年11月02日</div>
     <div class="title">我们在一起已经</div>
     <div class="days" id="dayNum">0</div>
     <div class="hms" id="hms">00:00:00</div>
@@ -139,6 +149,17 @@
     function initName() {
       const nameElement = document.getElementById('names');
       nameElement.innerText = `👦 ${BOY_NAME} ❤️ 👧 ${GIRL_NAME}`;
+    }
+
+    // 初始化开始日期显示
+    function initStartDate() {
+      // 处理月份和日期补零
+      const year = LOVE_START[0];
+      const month = String(LOVE_START[1] + 1).padStart(2, '0'); // 还原真实月份
+      const day = String(LOVE_START[2]).padStart(2, '0');
+      
+      const startDateElement = document.getElementById('startDate');
+      startDateElement.innerText = `始于：${year}年${month}月${day}日`;
     }
 
     // 计时
@@ -182,6 +203,7 @@
 
     // 启动
     initName();
+    initStartDate(); // 初始化开始日期显示
     update()
     setInterval(update, 1000)
     setInterval(createHeart, 350)
