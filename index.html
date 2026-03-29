@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <title>我们的恋爱时光</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: linear-gradient(135deg, #ffddee 0%, #ffe6e6 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #5a3939;
+      overflow-x: hidden;
+      padding: 0 16px;
+    }
+
+    /* 爱心背景 */
+    .heart-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .heart {
+      position: absolute;
+      color: #ff7a93;
+      animation: float 6s linear infinite;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) scale(0.5);
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-10vh) scale(1);
+        opacity: 0;
+      }
+    }
+
+    /* 主卡片 */
+    .love-box {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 32px 28px;
+      border-radius: 24px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+
+    .names {
+      font-size: 20px;
+      color: #e15a7c;
+      margin-bottom: 8px;
+    }
+
+    .title {
+      font-size: 22px;
+      color: #e65a7a;
+      margin-bottom: 12px;
+    }
+
+    .days {
+      font-size: clamp(50px, 14vw, 72px);
+      font-weight: bold;
+      color: #e15a7c;
+      line-height: 1.1;
+    }
+
+    .hms {
+      font-size: 18px;
+      color: #b86b7e;
+      margin-top: 8px;
+      letter-spacing: 1px;
+    }
+
+    .countdown {
+      margin-top: 20px;
+      font-size: 15px;
+      color: #775252;
+    }
+
+
+    .footer {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #b86b7e;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="heart-container" id="heartContainer"></div>
+
+  <div class="love-box">
+    <div class="names">👦 先生 & 👧 小姐</div>
+    <div class="title">我们在一起已经</div>
+    <div class="days" id="dayNum">0</div>
+    <div class="hms" id="hms">00:00:00</div>
+
+    <div class="countdown" id="countdown">
+      距离下一个纪念日还有：0 天
+    </div>
+
+    <div class="footer">往后余生，皆是你 ✨</div>
+  </div>
+
+  <audio id="bgMusic" loop>
+    <source src="https://www.johnson.ink/music/love.mp3" type="audio/mpeg">
+  
+
+  <script>
+    // ======================
+    // 在这里修改你们的信息
+    // ======================
+    const LOVE_START = [2023, 12, 2]  // 年, 月-1, 日
+    const MEMORIAL_DAY = 2           // 每月纪念日几号
+    const BOY_NAME = "凌白"
+    const GIRL_NAME = "林"
+
+
+    // 计时
+    function update() {
+      const start = new Date(LOVE_START[0], LOVE_START[1], LOVE_START[2])
+      const now = new Date()
+      const diff = now - start
+
+      const sec = Math.floor(diff / 1000) % 60
+      const min = Math.floor(diff / 60000) % 60
+      const hour = Math.floor(diff / 3600000) % 24
+      const day = Math.floor(diff / 86400000)
+
+      document.getElementById("dayNum").innerText = day + " 天"
+      document.getElementById("hms").innerText =
+        `${String(hour).padStart(2,0)}:${String(min).padStart(2,0)}:${String(sec).padStart(2,0)}`
+
+      // 下月纪念日
+      const next = new Date()
+      next.setDate(MEMORIAL_DAY)
+      if (next < now) next.setMonth(next.getMonth() + 1)
+      const left = Math.ceil((next - now) / 86400000)
+      document.getElementById("countdown").innerText =
+        `距离下一个纪念日还有：${left} 天`
+    }
+
+    // 爱心
+    function createHeart() {
+      const h = document.createElement("div")
+      h.className = "heart"
+      h.innerText = "❤️"
+      h.style.left = Math.random() * 100 + "vw"
+      h.style.animationDuration = (Math.random() * 3 + 4) + "s"
+      h.style.fontSize = Math.random() * 14 + 10 + "px"
+      heartContainer.appendChild(h)
+      setTimeout(() => h.remove(), 6000)
+    }
+
+    // 启动
+    update()
+    setInterval(update, 1000)
+    setInterval(createHeart, 350)
+  </script>
+</body>
+</html>
